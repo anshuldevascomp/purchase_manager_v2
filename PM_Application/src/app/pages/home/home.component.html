@@ -1,0 +1,209 @@
+<!-- Welcome Section -->
+<div class="bg-[url('assets/Points.png')] bg-cover bg-center min-h-screen flex flex-col items-center overflow-x-hidden pt-6">
+
+  <!-- Welcome Text -->
+  <div class="text-center">
+    <h1 class="text-xl font-bold text-white">
+      Welcome back <span class="text-yellow-400">{{ userName }}!</span>
+    </h1>
+    <p class="text-gray-200 text-sm">Touch Karna Hai Sky. You Can Also Fly.</p>
+  </div>
+
+  <!-- Points Container (Grey + Green) -->
+  <div class="bg-blue-700 bg-opacity-40 rounded-2xl p-5 my-6 w-[90%] shadow-xl">
+
+    <!-- Grey Points -->
+    <div>
+      <div class="text-gray-200 font-bold text-center">GREY POINTS ✨</div>
+
+      <!-- Rolling Counter -->
+      <div class="flex justify-center my-4">
+        <div class="flex justify-center items-center gap-1 px-2 py-4 bg-contain bg-center bg-no-repeat"
+             style="background-image: url('assets/singlecell.png'); min-height: 80px; max-width: 280px; width: 100%;">
+          <ng-container *ngFor="let digit of rollingGreyPoints; let i = index">
+            <span
+              class="font-mono font-extrabold text-2xl text-gray-500 flex items-center justify-center w-6 h-10"
+            >
+              {{ digit }}
+            </span>
+          </ng-container>
+        </div>
+      </div>
+
+      <p class="text-xs text-gray-200 text-center">
+        Points for all orders placed. <br> Convert them to Green Points soon.
+      </p>
+
+      <!-- Offers -->
+      <!-- <div class="flex justify-center mt-3 space-x-2 text-xs font-bold">
+        <!-- <span class="bg-blue-200 text-blue-900 rounded-full px-3 py-1">Aug 15 10X</span> -->
+        <!-- <span class="bg-blue-200 text-blue-900 rounded-full px-3 py-1">Aug 30 4X</span>
+        <span class="bg-blue-200 text-blue-900 rounded-full px-3 py-1">Sept 1 2X</span>
+        <span class="bg-blue-200 text-blue-900 rounded-full px-3 py-1">Sept 15 1X</span>
+      </div> -->
+      <div class="flex justify-center mt-3 space-x-2 text-xs font-bold">
+        <!-- <button class="bg-blue-200 text-blue-900 rounded-full px-3 py-1">Aug 15 10X</button> -->
+        <!-- <button class="bg-blue-200 text-blue-900 rounded-full px-3 py-1 " [hidden]="ispaymenttermsbutton4x">{{buttonname4x}}</button> -->
+        <button class="bg-blue-200 text-blue-900 rounded-full px-3 py-1 disabled:bg-gray-300 disabled:text-gray-500" *ngIf="ispaymenttermsbutton4x" [disabled]="isdatepassed4x">{{buttonname4x}}</button>
+        <button class="bg-blue-200 text-blue-900 rounded-full px-3 py-1 disabled:bg-gray-300 disabled:text-gray-500"  *ngIf="ispaymenttermsbutton2x"[disabled]="isdatepassed2x">{{buttonname2x}}</button>
+        <button class="bg-blue-200 text-blue-900 rounded-full px-3 py-1 disabled:bg-gray-300 disabled:text-gray-500" *ngIf="ispaymenttermsbutton1x" [disabled]="isdatepassed1x">{{buttonname1x}}</button>
+    </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t border-blue-400 my-5 opacity-50"></div>
+
+    <!-- Green Points -->
+    <div>
+      <div class="text-green-300 font-bold text-center">GREEN POINTS ✨</div>
+
+      <!-- Rolling Counter -->
+      <div class="flex justify-center my-4">
+        <div class="flex justify-center items-center gap-1 px-2 py-4 bg-contain bg-center bg-no-repeat"
+             style="background-image: url('assets/singlecell.png'); min-height: 80px; max-width: 280px; width: 100%;">
+          <ng-container *ngFor="let digit of rollingGreenPoints; let i = index">
+            <span
+              class="font-mono font-extrabold text-2xl text-green-700 flex items-center justify-center w-6 h-10"
+            >
+              {{ digit }}
+            </span>
+          </ng-container>
+        </div>
+      </div>
+
+      <p class="text-xs text-gray-200 text-center">
+        Points for paid up orders. <br> Encash these points anytime.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex justify-center mt-3 space-x-3">
+        <!-- <button class="bg-yellow-400 text-blue-900 font-bold rounded-lg px-4 py-2 shadow-md">
+          CALCULATE VALUE
+        </button> -->
+        <button class="bg-green-400 font-bold rounded-lg px-4 py-2 shadow-md"(click)="toggleRedemption()">
+          REDEEM POINTS
+        </button>
+      </div>
+
+      <p class="text-[10px] mt-2 text-white text-center">
+        REDEEM POINTS NOW OR SAVE FOR LATER
+      </p>
+    </div>
+  </div>
+
+  <!-- Promo Section -->
+  <div class="bg-white rounded-xl m-3 mt-6 p-4 shadow-lg flex items-center w-[90%]">
+    <img [src]="banner[0]['image']" class="h-20"  (error)="handleImgError($event)" alt="Schweppes Pink Tonic Zero">
+    <div class="ml-3">
+      <div class="font-semibold text-pink-800">{{banner[0]['description']}}</div>
+      <!-- <div class="font-bold text-lg text-pink-500">PINK TONIC ZERO</div>
+      <div class="text-xs text-pink-700">I like it like that.</div> -->
+    </div>
+  </div>
+
+<!-- Redeem Points Popup -->
+<div
+  *ngIf="isRedemptionPopup"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  (click)="closeRedemptionPopup()"
+>
+  <div
+    class="bg-white rounded-xl shadow-lg w-80 p-6 relative"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Header -->
+    <h2 class="text-xl font-bold text-gray-800 mb-3 text-center">Redeem Points</h2>
+
+    <!-- Available Points -->
+    <p class="text-sm text-gray-700 text-center mb-4">
+      You have <span class="font-bold text-green-600">{{ greenPoints }}</span> Green Points available.
+    </p>
+
+    <!-- Input: Points to Redeem -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700 mb-1">Points to Redeem</label>
+      <div class="flex items-center justify-center space-x-2">
+        <!-- Decrement Button -->
+        <!-- <button
+          (click)="decrementRedeemPoints()"
+          class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+        >-</button> -->
+
+        <!-- Number Input -->
+        <input
+          type="number"
+          [(ngModel)]="redeemPoints"
+          [max]="greenPoints"
+          min="1"
+          class="w-full text-center border rounded number-input"
+          placeholder="Enter points"
+        />
+
+        <!-- Increment Button -->
+        <!-- <button
+          (click)="incrementRedeemPoints()"
+          class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+        >+</button>
+      </div> -->
+
+
+      <p *ngIf="redeemPoints > greenPoints" class="text-xs text-red-500 mt-1">
+        Cannot redeem more than available points.
+      </p>
+    </div>
+
+    <!-- Redeem Type -->
+    <!-- <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700 mb-1">Redeem For</label>
+      <select
+        [(ngModel)]="redeemType"
+        class="input w-full text-center"
+      >
+        <option value="wallet">Wallet Balance</option>
+        <option value="voucher">Discount Voucher</option>
+        <option value="gift">Gift Item</option>
+      </select>
+    </div> -->
+
+    <!-- Buttons -->
+    <div class="flex justify-between mt-6">
+      <button
+        class="px-4 py-2 rounded-lg border hover:bg-gray-100"
+        (click)="closeRedemptionPopup()"
+
+      >
+        Cancel
+      </button>
+      <button
+        class="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 disabled:opacity-50"
+        [disabled]="redeemPoints <= 0 || redeemPoints > greenPoints"
+        (click)="RedemptionRequest()"
+
+      >
+        Redeem
+      </button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Popup Modal -->
+<div
+class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
+*ngIf="showPopup"
+>
+<div class="bg-white rounded-lg shadow-lg p-6 w-80 text-center">
+    <h2 class="text-lg font-bold mb-3">Payment Date Passed</h2>
+    <p class="text-sm text-gray-700 mb-5">{{ popupMessage }}</p>
+
+    <button
+      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      (click)="closePopup()"
+    >
+      OK
+    </button>
+</div>
+</div>
+
+
+</div>

@@ -1,0 +1,18 @@
+const express = require('express');
+const {getPrequeryData2,executeData,executeReportData,executeGenericReportData,executeGreenReportData,executeWinnerData,executePmt,getItemData,champPurchaser,growthChamp,skuRockstar,getItemName,getPartyData,growthpercent} = require('../controllers/config.controller');
+const router = express.Router();
+router.post("/getPrequeryData2", getPrequeryData2);
+router.post("/executeData", executeData);
+router.post("/executeReportData", executeReportData);
+router.post("/executeGenericReportData",executeGenericReportData);
+router.post("/executeGreenReportData",executeGreenReportData);
+router.post("/executeWinnerData",executeWinnerData);
+router.post("/getItemData",getItemData);
+router.post("/executePmt",executePmt);
+router.post("/champPurchaser",champPurchaser);
+router.post("/growthChamp",growthChamp);  
+router.post("/skuRockstar",skuRockstar);  
+router.post("/getItemName",getItemName);
+router.post("/getpartyData",getPartyData);
+router.post("/growthpercent",growthpercent);
+module.exports = router;

@@ -1,0 +1,418 @@
+<!-- Notification -->
+<div *ngIf="notification.show" class="fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg"
+     [class.bg-green-100]="notification.type === 'success'"
+     [class.text-green-700]="notification.type === 'success'"
+     [class.bg-red-100]="notification.type === 'error'"
+     [class.text-red-700]="notification.type === 'error'">
+  {{ notification.message }}
+</div>
+
+<div class="min-h-screen bg-gray-100 py-8 px-4">
+  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+    <!-- Profile Header -->
+    <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-6 text-white">
+      <div class="flex flex-col items-center">
+        <!-- Profile Image -->
+        <div class="relative mb-4">
+          <img
+            [src]="profileImage ? profileImage : 'assets/default-avatar.png'"
+            alt="Profile"
+            class="w-32 h-32 rounded-full border-4 border-white shadow-lg"
+            (error)="handleImgError($event)"
+          >
+          <!-- Upload Button -->
+          <label for="image-upload" class="absolute bottom-0 right-0 bg-white text-blue-600 rounded-full p-2 cursor-pointer shadow-md hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+            </svg>
+            <input id="image-upload" type="file"  accept="image/*" class="hidden">
+          </label>
+        </div>
+
+        <!-- User Info -->
+        <div class="text-center">
+          <h1 class="text-2xl font-bold">{{ userData.ContactName }}</h1>
+          <p class="text-blue-100 mt-1 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+            </svg>
+            {{ userData.Phone }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Growth Progress Section -->
+    <div class="p-6 border-b">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Growth Progress</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-blue-50 p-4 rounded-lg">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-600">Monthly Growth</span>
+            <span class="text-sm font-bold text-blue-600">{{ growthData.monthlyGrowth }}% ↑</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-blue-600 h-2.5 rounded-full" [style.width.%]="growthData.monthlyGrowth"></div>
+          </div>
+        </div>
+        <div class="bg-green-50 p-4 rounded-lg">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-600">Quarterly Growth</span>
+            <span class="text-sm font-bold text-green-600">{{ growthData.quarterlyGrowth }}% ↑</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-green-600 h-2.5 rounded-full" [style.width.%]="growthData.quarterlyGrowth"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Stats -->
+    <!-- <div class="p-6 border-b">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Performance Metrics</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <div class="text-2xl font-bold text-blue-600">{{ stats.totalOrders }}</div>
+          <div class="text-sm text-gray-500">Total Orders</div>
+        </div>
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <div class="text-2xl font-bold text-green-600">₹{{ stats.totalSpent }}</div>
+          <div class="text-sm text-gray-500">Total Spent</div>
+        </div>
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <div class="text-2xl font-bold text-purple-600">{{ stats.savedAmount }}</div>
+          <div class="text-sm text-gray-500">Total Savings</div>
+        </div>
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <div class="text-2xl font-bold text-yellow-600">{{ stats.points }}</div>
+          <div class="text-sm text-gray-500">Reward Points</div>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Actions -->
+    <div class="p-6" >
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Account Actions</h2>
+      <div class="space-y-3">
+        <button (click)="open()" class="w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <div class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            <span>Edit Profile</span>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+        </button>
+
+        <button (click)="openpopup()" class="w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <div class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+            </svg>
+            <span>Restaurants Attached</span>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+        </button>
+
+        <button (click)="logout()" class="w-full flex items-center justify-between p-4 bg-white border border-red-100 rounded-lg hover:bg-red-50 text-red-600 transition-colors">
+          <div class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            <span>Logout</span>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="isPopupOpen"
+  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+  (click)="closePopup()"
+>
+  <!-- STOP PROPAGATION SO CLICK INSIDE DOES NOT CLOSE POPUP -->
+  <div
+    class="bg-white rounded-lg shadow-lg w-[90%] sm:w-[420px]
+    max-h-[70vh] sm:max-h-[80vh] p-4 w-[450px] relative"
+    (click)="$event.stopPropagation()"
+  >
+
+    <!-- ❌ CROSS BUTTON -->
+    <button
+      (click)="closePopup()"
+      class="absolute top-3 right-3 text-gray-600 hover:text-gray-900"
+    >
+    ✕
+    </button>
+
+    <h2 class="text-xl font-semibold mb-4 text-center">Restaurant Details</h2>
+
+    <!-- GRID LIST WITH SCROLL -->
+    <div class="grid grid-cols-1 gap-4 max-h-[55vh] sm:max-h-[65vh] overflow-y-auto pr-2">
+      <div
+        *ngFor="let p of partyList"
+        class="p-4 bg-gray-100 rounded border border-gray-300"
+      >
+        <div class="font-semibold text-gray-800">
+          {{ p.PartyName }}
+        </div>
+        <div class="text-sm text-gray-600 break-words">
+          {{ p.Address1 }}
+        </div>
+        <div class="text-sm text-gray-600 break-words" *ngIf="p.Address2">
+          {{ p.Address2 }}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BACKDROP -->
+<div
+  *ngIf="isOpen"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+  (click)="close()"
+>
+  <!-- MODAL -->
+  <div class="w-full max-w-lg rounded-xl bg-white shadow-lg"  (click)="$event.stopPropagation()">
+
+    <!-- HEADER -->
+    <div class="flex items-center justify-between border-b px-6 py-4">
+      <h2 class="text-lg font-semibold">Edit Profile</h2>
+      <button
+        type="button"
+        class="text-gray-500 hover:text-gray-700"
+        (click)="close()"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- FORM -->
+    <form
+      [formGroup]="profileForm"
+      class="space-y-4 px-6 py-4 max-h-[70vh] overflow-y-auto"
+    >
+      <!-- PROFILE IMAGE -->
+      <div class="flex flex-col items-center gap-2">
+        <img
+          [src]="profileImage || 'assets/default.PNG'"
+          class="h-28 w-28 rounded-full border object-cover"
+          alt="Profile Image"
+          (error)="handleImgError($event)"
+        />
+
+        <label
+          class="cursor-pointer text-sm font-medium text-blue-600 hover:underline"
+        >
+          Change Photo
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+          />
+        </label>
+      </div>
+
+      <!-- FULL NAME -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          Full Name
+        </label>
+        <input
+          type="text"
+          formControlName="name"
+          class="input"
+          placeholder="Full Name"
+          [disabled]="true"
+        />
+      </div>
+
+      <!-- EMAIL (EDITABLE) -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          Email
+        </label>
+        <input
+          type="email"
+          formControlName="email"
+          class="input w-full "
+          placeholder="Email Address"
+        />
+        <p
+          *ngIf="profileForm.get('email')?.touched && profileForm.get('email')?.invalid"
+          class="mt-1 text-xs text-red-500"
+        >
+          Invalid email address
+        </p>
+      </div>
+
+      <!-- PHONE (EDITABLE) -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          Phone Number
+        </label>
+        <input
+          type="tel"
+          formControlName="phone"
+          class="input"
+          placeholder="Phone Number"
+        />
+        <p
+          *ngIf="profileForm.get('phone')?.touched && profileForm.get('phone')?.invalid"
+          class="mt-1 text-xs text-red-500"
+        >
+          Invalid phone number
+        </p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          Bank Name
+        </label>
+        <input
+          type="text"
+          formControlName="bankaccountname"
+          class="input w-full"
+          placeholder="Bank Name"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          Bank Account No
+        </label>
+        <input
+          type="text"
+          formControlName="bankaccountno"
+          class="input w-full"
+          placeholder="Bank Account No"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          IFSC Code
+        </label>
+        <input
+          type="text"
+          formControlName="upiid"
+          class="input w-full"
+          placeholder="IFSC Code"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          UPI Id
+        </label>
+        <input
+          type="text"
+          formControlName="upiid"
+          class="input w-full"
+          placeholder="UPI Id"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          Address Line1
+        </label>
+        <input
+          type="text"
+          formControlName="add1"
+          class="input w-full"
+          placeholder="Address Line1"
+        />
+      </div>
+
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          Address Line2
+        </label>
+        <input
+          type="text"
+          formControlName="add2"
+          class="input w-full"
+          placeholder="Address Line2"
+        />
+      </div>
+
+      <!-- DESIGNATION -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          Designation
+        </label>
+        <input
+          type="text"
+          formControlName="designation"
+          class="input"
+          placeholder="Designation"
+        />
+      </div>
+
+      <!-- DEPARTMENT -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          Department
+        </label>
+        <input
+          type="text"
+          formControlName="department"
+          class="input"
+          placeholder="Department"
+        />
+      </div>
+
+      <!-- BIO -->
+      <!-- <div>
+        <label class="block text-sm font-medium text-gray-700">
+          Bio
+        </label>
+        <textarea
+          rows="3"
+          formControlName="bio"
+          class="input"
+          placeholder="Short bio"
+        ></textarea>
+      </div> -->
+    </form>
+
+    <!-- FOOTER -->
+    <div
+      class="flex flex-col gap-2 border-t px-6 py-4 sm:flex-row sm:justify-end"
+    >
+      <button
+        type="button"
+        class="rounded-md border px-4 py-2 hover:bg-gray-100"
+        (click)="close()"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="rounded-md bg-gradient-to-r from-blue-600 to-blue-800 px-4 py-2 text-white hover:bg-blue-700"
+        (click)="saveProfile()"
+      >
+        Save Changes
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+

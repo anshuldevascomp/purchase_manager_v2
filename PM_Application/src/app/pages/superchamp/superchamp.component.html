@@ -1,0 +1,59 @@
+<!-- Main Background -->
+<div class="relative min-h-screen flex flex-col items-center overflow-x-hidden pt-6 bg-[url('assets/halloffame1.png')] bg-cover bg-center" (mouseenter)="stopAutoSlide()" (mouseleave)="startAutoSlide()">
+  <!-- Super Champs Carousel -->
+  <div class="carousel-container">
+    <div class="relative w-full overflow-hidden">
+      <!-- Carousel track -->
+      <div  class="carousel-track" aria-live="polite" (pointerdown)="onPointerDown($event)"
+      (pointerup)="onPointerUp($event)">
+        <!-- <div class="slider-wrapper" #slider> -->
+        <div *ngFor="let champ of champs;  trackBy: trackById;let i = index"
+             class="champ-card"
+             [class.active]="champ.active"
+             [class.prev]="i === ((currentIndex - 1 + champs.length) % champs.length)"
+             [class.next]="i === ((currentIndex + 1) % champs.length)"
+             [attr.aria-label]="'Slide ' + (i + 1) + ' of ' + champs.length + ': ' + champ.title + ' - ' + champ.name"
+             [attr.aria-hidden]="!champ.active">
+          <div class="champ-image-container">
+            <img [src]="champ.image" [alt]="champ.title + ' - ' + champ.name" class="champ-image" loading="lazy"  (error)="handleImgError($event)"  (load)="onImageLoad()">
+          </div>
+          <div class="champ-content">
+            <div class="champ-title">{{ champ.title }}</div>
+            <div class="champ-name">{{ champ.name }}</div>
+          </div>
+        </div>
+      <!-- </div> -->
+      </div>
+
+      <!-- Navigation buttons -->
+      <!-- <button class="carousel-button prev"
+              (click)="prevSlide()"
+              aria-label="Previous slide"
+              [attr.aria-disabled]="currentIndex === 0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+      <button class="carousel-button next"
+              (click)="nextSlide()"
+              aria-label="Next slide"
+              [attr.aria-disabled]="currentIndex === champs.length - 1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button> -->
+    </div>
+
+    <!-- Indicators -->
+    <div class="carousel-indicators" role="tablist" aria-label="Slide navigation">
+      <button *ngFor="let champ of champs; let i = index"
+              class="indicator"
+              [class.active]="i === currentIndex"
+              (click)="goToSlide(i)"
+              [attr.aria-selected]="i === currentIndex"
+              [attr.aria-label]="'Go to slide ' + (i + 1) + ' of ' + champs.length + ': ' + champ.title"
+              role="tab">
+      </button>
+    </div>
+  </div>
+</div>

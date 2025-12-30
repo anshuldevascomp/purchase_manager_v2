@@ -1,0 +1,101 @@
+<!-- Background Gradient and Confetti Layer -->
+<div class="relative min-h-screen flex flex-col items-center overflow-x-hidden pt-6
+bg-[url('assets/events.jpg')] bg-cover bg-center">
+<div class="h-5"></div>
+
+  <!-- Silver Events label -->
+  <div class="flex justify-center">
+    <div
+      class="bg-gradient-to-r from-gray-300 to-gray-500 text-lg md:text-xl rounded-lg px-6 py-1 font-bold border-2 border-white shadow-md uppercase tracking-wide"
+      style="letter-spacing:0.1em;">
+      EVENTS
+    </div>
+  </div>
+  <div class="h-5"></div>
+
+  <!-- Main Content -->
+  <!-- <div class="flex items-center justify-center min-h-screen"> -->
+  <main class="flex-1 w-full max-w-4xl px-4 overflow-y-auto pb-20 mx-auto">
+    <!-- Carousel Sections -->
+    <ng-container *ngFor="let section of carouselSections">
+      <section class="mb-8">
+        <!-- <h2 class="text-white font-semibold text-lg mb-3 pl-2">{{ section.title }}</h2> -->
+
+        <!-- Carousel Container -->
+
+        <div class="relative overflow-hidden rounded-xl bg-white/10 backdrop-blur-sm p-1 "  style="touch-action: pan-y"(pointerdown)="onPointerDown($event,section)"
+        (pointerup)="onPointerUp($event,section)">
+          <!-- Carousel Track -->
+          <div class="flex transition-transform duration-300 ease-out touch-action: pan-y"
+               [style.transform]="'translateX(' + (-100 * section.currentIndex) + '%)'" (pointerdown)="onPointerDown($event,section)"
+               (pointerup)="onPointerUp($event,section)">
+            <div *ngFor="let item of section.items" class="w-full flex-shrink-0 px-1">
+              <div class="bg-white/20 rounded-xl overflow-hidden">
+                <!-- <div class="aspect-w-16 aspect-h-9"> -->
+                  <div class=" w-full
+                  overflow-hidden
+                  mx-auto mb-4
+                  flex items-center justify-center
+                  bg-black/10
+                  rounded-lg
+                  p-2.5
+                  box-border
+                  h-[250px]
+                  sm:h-[300px]
+                  md:h-[350px]
+                  lg:h-[450px]
+                  xl:h-[470px]      "  >
+                  <!-- <div class="event-image-container"> -->
+                  <img [src]="item.image" [alt]="item.title" class="w-full h-full object-cover"(click)="openPopup(item)" (error)="handleImgError($event)" >
+                </div>
+                <div class="p-5 text-center">
+                  <h3 class="text-white font-medium">{{ item.title }}</h3>
+                  <!-- <span class="text-xs text-white/70">{{ item.category | titlecase }}</span> -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation Arrows -->
+          <!-- <button *ngIf="section.items.length > 1"
+                  (click)="prevSlide(section)"
+                  class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full w-8 h-8 flex items-center justify-center z-10 hover:bg-black/70 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          <button *ngIf="section.items.length > 1"
+                  (click)="nextSlide(section)"
+                  class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full w-8 h-8 flex items-center justify-center z-10 hover:bg-black/70 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+          </button> -->
+
+          <!-- Indicators -->
+          <div *ngIf="section.items.length > 1" class="absolute bottom-2 left-0 right-0 flex justify-center gap-2 z-10">
+            <button *ngFor="let item of section.items; let i = index"
+                    (click)="goToSlide(section, i)"
+                    class="w-2 h-2 rounded-full transition-all"
+                    [ngClass]="i === section.currentIndex ? 'bg-white' : 'opacity-50 bg-white'">
+            </button>
+          </div>
+        </div>
+      </section>
+    </ng-container>
+    <!-- Popup Modal -->
+    <div *ngIf="isPopupOpen"
+     class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 px-4 py-6"  (click)="closePopup()">
+  <div class="bg-white rounded-lg max-w-lg w-full p-6 relative">
+    <button class="absolute top-2 right-2 text-gray-600 hover:text-gray-900" (click)="closePopup()">✕</button>
+    <img [src]="selectedItem.image" [alt]="selectedItem.title" class="w-full h-64 object-cover rounded" (error)="handleImgError($event)"/>
+    <!-- <h2 class="mt-4 text-xl font-semibold">{{ selectedItem.title }}</h2> -->
+    <p class="mt-2 text-gray-700">{{ selectedItem.description || 'No description available.' }}</p>
+  </div>
+</div>
+  </main>
+<!-- </div> -->
+
+
+
+</div>

@@ -298,8 +298,9 @@ popupMessage = '';
     console.log('FINAL PAYLOAD:', payload);
 this.authService.RedemptionRequest(payload).subscribe(
   (response) => {
+    const pointsRedeemed = this.redeemPoints;
     this.closeRedemptionPopup();
-    this.notificationService.addNotification('Redemption Successful', `You have redeemed ${this.redeemPoints} points.`);
+    this.notificationService.addNotification('Redemption Successful', `You have redeemed ${pointsRedeemed} points.`);
     this.loadPointsData(this.userData.ContactId);
 
   },
